@@ -7,12 +7,15 @@ import ru.siladimary.BankProject.services.AccountsService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "Account")
+@ToString(exclude = "id")
 public class Account implements Serializable {
     @Id
     @Column(name = "id")
@@ -32,11 +35,13 @@ public class Account implements Serializable {
     @NotNull(message = "Логин пользователя должен здесь быть")
     private Person username;
 
+    @OneToMany(mappedBy = "accountNumber", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Transaction> transactions = new ArrayList<>();
+
     public Account(Person username) {
         this.accountNumber = AccountsService.generateAccountNumber();
         this.balance = BigDecimal.ZERO;
         this.username = username;
+        this.transactions = new ArrayList<>();
     }
-
-    //Возможно понадобится @Transient со списком транзакций
 }

@@ -2,7 +2,6 @@ package ru.siladimary.BankProject.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,5 +43,14 @@ public class Transaction {
         this.amount = amount;
         this.timestamp = LocalDateTime.now();
         this.accountNumber = accountNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionAction=" + transactionAction +
+                ", amount=" + amount +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

@@ -1,9 +1,7 @@
 package ru.siladimary.BankProject.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.TransactionAction;
@@ -13,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class TransactionDTO {
 
     @NotNull(message = "Действие не должно быть пустым")

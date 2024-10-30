@@ -50,7 +50,6 @@ public class Person { //если ничего не будет работать -
     @Column(name = "total_balance")
     private BigDecimal totalBalance;
 
-    @Transient
     @OneToMany(mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Account> accounts = new ArrayList<>();
 
@@ -62,5 +61,12 @@ public class Person { //если ничего не будет работать -
         this.password = password;
         this.totalBalance = BigDecimal.ZERO;
         this.accounts = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "username='" + username + '\'' +
+                '}';
     }
 }

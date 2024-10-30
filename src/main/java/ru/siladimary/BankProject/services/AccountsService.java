@@ -3,11 +3,15 @@ package ru.siladimary.BankProject.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.siladimary.BankProject.exceptions.PersonNotCreatedException;
 import ru.siladimary.BankProject.models.Account;
+import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.repositories.AccountsRepository;
 import ru.siladimary.BankProject.repositories.PeopleRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Service
