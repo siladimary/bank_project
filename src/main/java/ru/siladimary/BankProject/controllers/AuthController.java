@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.siladimary.BankProject.dto.AuthenticationDTO;
 import ru.siladimary.BankProject.dto.PersonDTO;
 import ru.siladimary.BankProject.exceptions.ErrorConstructUtil;
-import ru.siladimary.BankProject.exceptions.PersonErrorResponse;
+import ru.siladimary.BankProject.exceptions.ErrorResponse;
 import ru.siladimary.BankProject.exceptions.PersonNotCreatedException;
 import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.security.JWTUtil;
@@ -83,8 +83,8 @@ public class AuthController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<PersonErrorResponse> personNotCreatedException(PersonNotCreatedException e) {
-        PersonErrorResponse errorResponse = new PersonErrorResponse(e.getMessage());
+    private ResponseEntity<ErrorResponse> personNotCreatedException(PersonNotCreatedException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

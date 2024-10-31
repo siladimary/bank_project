@@ -6,7 +6,9 @@ import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AccountsRepository extends JpaRepository<Account, Long> {
+    Optional<Account> findByAccountNumber(Integer number);
 }
