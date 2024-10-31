@@ -7,7 +7,6 @@ import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.Transaction;
 import ru.siladimary.BankProject.models.TransactionAction;
 import ru.siladimary.BankProject.repositories.AccountsRepository;
-import ru.siladimary.BankProject.repositories.PeopleRepository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class AccountsService {
     }
 
     @Transactional
-    public void depositAccount(Account account, BigDecimal amount) {
+    public void deposit(Account account, BigDecimal amount) {
         checkAmount(amount);
 
         account.setBalance(account.getBalance().add(amount));
@@ -44,9 +43,30 @@ public class AccountsService {
         transaction.setAccountNumber(account);
     }
 
+    @Transactional
+    public void withdraw(Account account, BigDecimal amount){
+        checkAmount(amount);
+        checkWithdraw(account, amount);
+
+        account.setBalance(account.getBalance().subtract(amount));
+
+        Transaction transaction = new Transaction(TransactionAction.WITHDRAW, amount, account);
+
+        account.getTransactions().add(transaction);
+        transaction.setAccountNumber(account);
+    }
+
     private void checkAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Сумма должна быть положительной");
+    }
+
+    private void checkWithdraw(Account account, BigDecimal amount){
+        BigDecimal newBalance = account.getBalance().subtract(amount);
+
+        if(newBalance.compareTo(BigDecimal.ZERO) < 0){
+            throw new IllegalArgumentException("Недостаточно средств на счете");
+        }
     }
 
     //TODO методы для пополнения, снятия и перевода

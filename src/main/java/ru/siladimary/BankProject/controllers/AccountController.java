@@ -33,19 +33,36 @@ public class AccountController {
     }
 
     @PostMapping("/{accountNumber}/deposit")
-    private ResponseEntity<String> deposit(@PathVariable Integer accountNumber,
+    public ResponseEntity<String> deposit(@PathVariable Integer accountNumber,
                                            @RequestParam BigDecimal amount) {
         try {
             Optional<Account> account = accountsService.findByAccountNumber(accountNumber);
             if (account.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Счета с таким номером не существует");
             }
-            accountsService.depositAccount(account.get(), amount);
+            accountsService.deposit(account.get(), amount);
             return ResponseEntity.ok("Счет успешно пополнен");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Произошла ошибка при пополнении счета");
+        }
+    }
+
+    @PostMapping("/{accountNumber}/withdraw")
+    public ResponseEntity<String> withdraw(@PathVariable Integer accountNumber,
+                                           @RequestParam BigDecimal amount){
+        try {
+            Optional<Account> account = accountsService.findByAccountNumber(accountNumber);
+            if (account.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Счета с таким номером не существует");
+            }
+            accountsService.withdraw(account.get(), amount);
+            return ResponseEntity.ok("Деньги успешно сняты");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка при выводе средств");
         }
     }
 
