@@ -67,7 +67,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
+    public ResponseEntity<Map<String, String>> performLogin(@RequestBody @Valid AuthenticationDTO authenticationDTO,
+                                                            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().body(Map.of("error",
+                    ErrorConstructUtil.constructErrorMessageToClient(bindingResult)));
+        }
+
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getUsername(),
                         authenticationDTO.getPassword());

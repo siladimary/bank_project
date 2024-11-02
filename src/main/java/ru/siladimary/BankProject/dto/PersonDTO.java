@@ -1,9 +1,6 @@
 package ru.siladimary.BankProject.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.siladimary.BankProject.models.Account;
@@ -33,9 +30,11 @@ public class PersonDTO {
     private String username;
 
     @NotNull(message = "Пароль не может быть пустым")
+    @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     private String password;
 
     @NotNull(message = "Подтвердите пароль")
+    @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     private String confirmPassword;
 
     @NotNull(message = "Баланс не может быть null")

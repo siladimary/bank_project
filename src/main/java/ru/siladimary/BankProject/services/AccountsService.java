@@ -1,8 +1,10 @@
 package ru.siladimary.BankProject.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.siladimary.BankProject.dto.TransferRequest;
 import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.Transaction;
 import ru.siladimary.BankProject.models.TransactionAction;
@@ -16,16 +18,19 @@ import java.util.Random;
 @Transactional(readOnly = true)
 public class AccountsService {
     private final AccountsRepository accountsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AccountsService(AccountsRepository accountsRepository) {
+    public AccountsService(AccountsRepository accountsRepository, PasswordEncoder passwordEncoder) {
         this.accountsRepository = accountsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public static Integer generateAccountNumber() {
         Random random = new Random();
         return 10000000 + random.nextInt(90000000);
     }
+
 
     public Optional<Account> findByAccountNumber(Integer number) {
         return accountsRepository.findByAccountNumber(number);
@@ -37,20 +42,45 @@ public class AccountsService {
 
         account.setBalance(account.getBalance().add(amount));
 
-        Transaction transaction = new Transaction(TransactionAction.DEPOSIT, amount, account);
-
-        account.getTransactions().add(transaction);
-        transaction.setAccountNumber(account);
+        createTransaction(TransactionAction.DEPOSIT, account, amount);
     }
 
     @Transactional
-    public void withdraw(Account account, BigDecimal amount){
+    public void withdraw(Account account, BigDecimal amount) {
         checkAmount(amount);
         checkWithdraw(account, amount);
 
         account.setBalance(account.getBalance().subtract(amount));
 
-        Transaction transaction = new Transaction(TransactionAction.WITHDRAW, amount, account);
+        createTransaction(TransactionAction.WITHDRAW, account, amount);
+    }
+
+
+    @Transactional
+    public void transfer(Account senderAccount, TransferRequest transferRequest) {
+        Optional<Account> recipientAccount = findByAccountNumber(transferRequest.getRecipientAccountNumber());
+        if (recipientAccount.isEmpty())
+            throw new IllegalArgumentException("Счет получателя не найден");
+
+        if (senderAccount.getAccountNumber().equals(transferRequest.getRecipientAccountNumber()))
+            throw new IllegalArgumentException("Вы ввели свой номер счета");
+
+        if (!checkPassword(senderAccount, transferRequest.getPassword()))
+            throw new IllegalArgumentException("Неверный пароль");
+
+        checkAmount(transferRequest.getAmount());
+        checkWithdraw(senderAccount, transferRequest.getAmount());
+
+        senderAccount.setBalance(senderAccount.getBalance().subtract(transferRequest.getAmount()));
+        createTransaction(TransactionAction.TRANSFER, senderAccount, transferRequest.getAmount());
+
+        deposit(recipientAccount.get(), transferRequest.getAmount());
+    }
+
+
+
+    private void createTransaction(TransactionAction action, Account account, BigDecimal amount) {
+        Transaction transaction = new Transaction(action, amount, account);
 
         account.getTransactions().add(transaction);
         transaction.setAccountNumber(account);
@@ -61,13 +91,18 @@ public class AccountsService {
             throw new IllegalArgumentException("Сумма должна быть положительной");
     }
 
-    private void checkWithdraw(Account account, BigDecimal amount){
+    private void checkWithdraw(Account account, BigDecimal amount) {
         BigDecimal newBalance = account.getBalance().subtract(amount);
 
-        if(newBalance.compareTo(BigDecimal.ZERO) < 0){
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Недостаточно средств на счете");
         }
     }
 
-    //TODO методы для пополнения, снятия и перевода
+    private boolean checkPassword(Account account, String password) {
+        if (account == null || password == null)
+            return false;
+
+        return passwordEncoder.matches(password, account.getUsername().getPassword());
+    }
 }

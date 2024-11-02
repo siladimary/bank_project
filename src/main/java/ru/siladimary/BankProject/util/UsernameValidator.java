@@ -26,9 +26,8 @@ public class UsernameValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if (peopleService.findByUsername(person.getUsername()).isPresent()) {
+        if (peopleService.findByUsername(person.getUsername()).isPresent())
             errors.rejectValue("username", "",
                     "Такой логин уже существует");
-        }
     }
 }

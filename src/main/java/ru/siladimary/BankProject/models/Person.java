@@ -1,10 +1,7 @@
 package ru.siladimary.BankProject.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -43,6 +40,7 @@ public class Person { //если ничего не будет работать -
     private String username;
 
     @NotNull(message = "Пароль не может быть пустым")
+    @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     @Column(name = "password")
     private String password;
 

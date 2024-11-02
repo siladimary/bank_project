@@ -1,6 +1,7 @@
 package ru.siladimary.BankProject.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +13,6 @@ public class AuthenticationDTO {
     private String username;
 
     @NotEmpty(message = "Пароль не должен быть пустым")
+    @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     private String password;
 }
