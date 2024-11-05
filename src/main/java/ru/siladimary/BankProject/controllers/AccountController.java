@@ -13,6 +13,7 @@ import ru.siladimary.BankProject.exceptions.ErrorConstructUtil;
 import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.security.PersonDetails;
 import ru.siladimary.BankProject.services.AccountsService;
+import ru.siladimary.BankProject.services.PeopleService;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -21,10 +22,12 @@ import java.util.Optional;
 @RequestMapping("/account")
 public class AccountController {
     private final AccountsService accountsService;
+    private final PeopleService peopleService;
 
     @Autowired
-    public AccountController(AccountsService accountsService) {
+    public AccountController(AccountsService accountsService, PeopleService peopleService) {
         this.accountsService = accountsService;
+        this.peopleService = peopleService;
     }
 
     //TODO метод showHomePage, где будут данные о балансе и т д
@@ -45,10 +48,12 @@ public class AccountController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Счета с таким номером не существует");
             }
             accountsService.deposit(account.get(), amount);
+        //    peopleService.updateTotalBalance(account.get());
             return ResponseEntity.ok("Счет успешно пополнен");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(500).body("Произошла ошибка при пополнении счета");
         }
     }
@@ -89,7 +94,7 @@ public class AccountController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Произошла ошибка при выводе средств");
+            return ResponseEntity.status(500).body("Произошла ошибка при переводе средств");
         }
     }
 }

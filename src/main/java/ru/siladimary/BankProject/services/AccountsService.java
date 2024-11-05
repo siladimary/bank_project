@@ -19,11 +19,13 @@ import java.util.Random;
 public class AccountsService {
     private final AccountsRepository accountsRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PeopleService peopleService;
 
     @Autowired
-    public AccountsService(AccountsRepository accountsRepository, PasswordEncoder passwordEncoder) {
+    public AccountsService(AccountsRepository accountsRepository, PasswordEncoder passwordEncoder, PeopleService peopleService) {
         this.accountsRepository = accountsRepository;
         this.passwordEncoder = passwordEncoder;
+        this.peopleService = peopleService;
     }
 
     public Integer generateUniqueAccountNumber(){
@@ -43,8 +45,9 @@ public class AccountsService {
         checkAmount(amount);
 
         account.setBalance(account.getBalance().add(amount));
-
         createTransaction(TransactionAction.DEPOSIT, account, amount);
+
+        peopleService.updateTotalBalance(account);
     }
 
     @Transactional
@@ -53,8 +56,9 @@ public class AccountsService {
         checkWithdraw(account, amount);
 
         account.setBalance(account.getBalance().subtract(amount));
-
         createTransaction(TransactionAction.WITHDRAW, account, amount);
+
+        peopleService.updateTotalBalance(account);
     }
 
 
@@ -74,9 +78,12 @@ public class AccountsService {
         checkWithdraw(senderAccount, transferRequest.getAmount());
 
         senderAccount.setBalance(senderAccount.getBalance().subtract(transferRequest.getAmount()));
-        createTransaction(TransactionAction.TRANSFER, senderAccount, transferRequest.getAmount());
+        createTransaction(TransactionAction.TRANSFER_OUT, senderAccount, transferRequest.getAmount());
+        peopleService.updateTotalBalance(senderAccount);
 
-        deposit(recipientAccount.get(), transferRequest.getAmount());
+        recipientAccount.get().setBalance(recipientAccount.get().getBalance().add(transferRequest.getAmount()));
+        createTransaction(TransactionAction.TRANSFER_IN, recipientAccount.get(), transferRequest.getAmount());
+        peopleService.updateTotalBalance(recipientAccount.get());
     }
 
 

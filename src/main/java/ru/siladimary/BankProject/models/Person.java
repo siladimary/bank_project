@@ -40,7 +40,7 @@ public class Person { //если ничего не будет работать -
     private String username;
 
     @NotNull(message = "Пароль не может быть пустым")
-    @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
+    //@Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     @Column(name = "password")
     private String password;
 
