@@ -26,11 +26,13 @@ public class AccountsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public static Integer generateAccountNumber() {
-        Random random = new Random();
-        return 10000000 + random.nextInt(90000000);
+    public Integer generateUniqueAccountNumber(){
+        Integer accountNumber;
+        do {
+            accountNumber = generateNumber();
+        } while (accountsRepository.existsByAccountNumber(accountNumber));
+        return accountNumber;
     }
-
 
     public Optional<Account> findByAccountNumber(Integer number) {
         return accountsRepository.findByAccountNumber(number);
@@ -78,6 +80,9 @@ public class AccountsService {
     }
 
 
+    private Integer generateNumber() {
+        return 10000000 + new Random().nextInt(90000000);
+    }
 
     private void createTransaction(TransactionAction action, Account account, BigDecimal amount) {
         Transaction transaction = new Transaction(action, amount, account);

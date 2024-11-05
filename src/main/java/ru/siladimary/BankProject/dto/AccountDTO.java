@@ -25,8 +25,8 @@ public class AccountDTO {
 
     private List<Transaction> transactions;
 
-    public AccountDTO(Person username) {
-        this.accountNumber = AccountsService.generateAccountNumber();
+    public AccountDTO(Integer accountNumber, Person username) {
+        this.accountNumber = accountNumber;
         this.balance = BigDecimal.ZERO;
         this.username = username;
         this.transactions = new ArrayList<>();

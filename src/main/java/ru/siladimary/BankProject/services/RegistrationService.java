@@ -13,11 +13,13 @@ import ru.siladimary.BankProject.repositories.PeopleRepository;
 public class RegistrationService {
     private final PeopleRepository peopleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountsService accountsService;
 
     @Autowired
-    public RegistrationService(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
+    public RegistrationService(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder, AccountsService accountsService) {
         this.peopleRepository = peopleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.accountsService = accountsService;
     }
 
     @Transactional
@@ -25,7 +27,7 @@ public class RegistrationService {
         String encodedPassword = passwordEncoder.encode(person.getPassword());
         person.setPassword(encodedPassword);
 
-        Account account = new Account(person);
+        Account account = new Account(accountsService.generateUniqueAccountNumber(), person);
 
         person.getAccounts().add(account);
         account.setUsername(person);

@@ -38,8 +38,8 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "accountNumber", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Transaction> transactions = new ArrayList<>();
 
-    public Account(Person username) {
-        this.accountNumber = AccountsService.generateAccountNumber();
+    public Account(Integer accountNumber, Person username) {
+        this.accountNumber = accountNumber;
         this.balance = BigDecimal.ZERO;
         this.username = username;
         this.transactions = new ArrayList<>();
