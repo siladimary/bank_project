@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI api(){
         return new OpenAPI()
                 .servers(
-                        List.of(new Server().url("http://localhost:8081"))
+                        List.of(new Server().url("http://localhost:8080"))
                 )
                 .info(
                         new Info().title("Простейшее банковское приложение")
@@ -23,4 +23,4 @@ public class SwaggerConfig {
     }
 }
 
-//http://localhost:8081/swagger-ui/index.html#/
+//http://localhost:8080/swagger-ui/index.html#/

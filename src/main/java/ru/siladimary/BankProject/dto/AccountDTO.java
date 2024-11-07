@@ -1,7 +1,11 @@
 package ru.siladimary.BankProject.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.models.Transaction;
@@ -13,6 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class AccountDTO {
     @NotNull(message = "Номер счета не может быть пустым")
     private Integer accountNumber;
@@ -21,11 +26,14 @@ public class AccountDTO {
     private BigDecimal balance;
 
     @NotNull(message = "Логин пользователя должен здесь быть")
-    private Person username;
+    @JsonBackReference
+    private PersonResponse username;
 
-    private List<Transaction> transactions;
+   //@JsonManagedReference
+    @JsonIgnore
+    private List<TransactionDTO> transactions;
 
-    public AccountDTO(Integer accountNumber, Person username) {
+    public AccountDTO(Integer accountNumber, PersonResponse username) {
         this.accountNumber = accountNumber;
         this.balance = BigDecimal.ZERO;
         this.username = username;

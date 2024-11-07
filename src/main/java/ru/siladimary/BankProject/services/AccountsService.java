@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.siladimary.BankProject.dto.TransferRequest;
 import ru.siladimary.BankProject.models.Account;
+import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.models.Transaction;
 import ru.siladimary.BankProject.models.TransactionAction;
 import ru.siladimary.BankProject.repositories.AccountsRepository;
@@ -38,6 +39,16 @@ public class AccountsService {
 
     public Optional<Account> findByAccountNumber(Integer number) {
         return accountsRepository.findByAccountNumber(number);
+    }
+
+    @Transactional
+    public void create(Person person){
+        Account account = new Account(generateUniqueAccountNumber(), person);
+
+        person.getAccounts().add(account);
+        account.setUsername(person);
+
+        accountsRepository.save(account);
     }
 
     @Transactional

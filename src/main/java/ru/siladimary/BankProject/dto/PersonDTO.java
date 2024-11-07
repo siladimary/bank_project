@@ -1,5 +1,6 @@
 package ru.siladimary.BankProject.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
