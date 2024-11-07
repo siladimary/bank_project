@@ -1,6 +1,8 @@
 package ru.siladimary.BankProject.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +27,7 @@ public class TransactionDTO {
     private LocalDateTime timestamp;
 
     @NotNull(message = "Номер счета должен быть заполнен")
-   // @JsonBackReference
+    @JsonIgnore
     private AccountDTO accountNumber;
 
     public TransactionDTO(TransactionAction transactionAction, BigDecimal amount, AccountDTO accountNumber) {

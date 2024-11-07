@@ -2,14 +2,10 @@ package ru.siladimary.BankProject.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.siladimary.BankProject.models.Person;
-import ru.siladimary.BankProject.models.Transaction;
-import ru.siladimary.BankProject.services.AccountsService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,7 +25,6 @@ public class AccountDTO {
     @JsonBackReference
     private PersonResponse username;
 
-   //@JsonManagedReference
     @JsonIgnore
     private List<TransactionDTO> transactions;
 

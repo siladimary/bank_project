@@ -24,7 +24,7 @@ public class TransactionsService {
 
     public ResponseEntity<?> findAll(Pageable pageable) {
         Page<Transaction> transactionsPage = transactionsRepository.findAll(PageRequest.of(pageable.getPageNumber(),
-                10, Sort.by("timestamp").descending())); //по убыванию
+                20, Sort.by("timestamp").descending())); //по убыванию
 
         if (transactionsPage.isEmpty()) {
             return ResponseEntity.ok("Пока что не было выполнено ни одной транзакции");

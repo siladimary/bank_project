@@ -1,5 +1,6 @@
 package ru.siladimary.BankProject.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "account_number", referencedColumnName = "account_number")
     @NotNull(message = "Номер счета должен быть заполнен")
+    @JsonIgnore
     private Account accountNumber;
 
     public Transaction(TransactionAction transactionAction, BigDecimal amount, Account accountNumber) {

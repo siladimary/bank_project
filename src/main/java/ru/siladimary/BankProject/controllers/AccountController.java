@@ -2,6 +2,8 @@ package ru.siladimary.BankProject.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.security.PersonDetails;
 import ru.siladimary.BankProject.services.AccountsService;
+import ru.siladimary.BankProject.services.TransactionsService;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -22,11 +25,14 @@ import java.util.Optional;
 @RequestMapping("/account")
 public class AccountController {
     private final AccountsService accountsService;
+    private final TransactionsService transactionsService;
 
     @Autowired
-    public AccountController(AccountsService accountsService) {
+    public AccountController(AccountsService accountsService, TransactionsService transactionsService) {
         this.accountsService = accountsService;
+        this.transactionsService = transactionsService;
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<String> createNewAccount(){
@@ -39,6 +45,21 @@ public class AccountController {
             return ResponseEntity.ok("Новый аккаунт успешно зарегистрирован");
         } catch (Exception e){
             return ResponseEntity.status(500).body("Произошла ошибка при создании нового аккаунта");
+        }
+    }
+
+    @GetMapping("/{accountNumber}/transactions")
+    private ResponseEntity<?> getTransactions(@PathVariable Integer accountNumber,
+                                              @RequestParam(defaultValue = "0") int page){
+        try {
+            Optional<Account> account = accountsService.findByAccountNumber(accountNumber);
+            if (account.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Счета с таким номером не существует");
+            }
+            Pageable pageable = PageRequest.of(page, 20);
+            return transactionsService.findAll(pageable);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Произошла ошибка при загрузке транзакций");
         }
     }
 
