@@ -1,6 +1,5 @@
 package ru.siladimary.BankProject.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class PersonDTO {
-
     @NotNull(message = "Поле с именем не должно быть пустым")
     @Pattern(regexp = "[А-Я][а-яё]+")
     private String firstName;

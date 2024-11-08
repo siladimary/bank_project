@@ -12,8 +12,10 @@ import java.math.BigDecimal;
 public class TransferRequest {
     @NotNull(message = "Заполните номер счета для перевода (8 цифр)")
     private Integer recipientAccountNumber;
+
     @NotNull(message = "Введите сумму")
     private BigDecimal amount;
+
     @NotNull(message = "Введите пароль")
     @Size(min = 4, max = 4, message = "Пароль должен состоять из четырех символов")
     private String password;

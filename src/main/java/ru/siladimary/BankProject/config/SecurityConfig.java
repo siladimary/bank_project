@@ -34,18 +34,6 @@ public class SecurityConfig {
                         .requestMatchers("/auth/registration", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
-//                .formLogin((form) -> form
-//                       // .loginPage("/auth/login")
-//                        .loginProcessingUrl("/auth/login")
-//                        .defaultSuccessUrl("/account/home", true)
-//                       // .failureUrl("/auth/login?error")
-//                        .permitAll()
-//                )
-//                .logout((form) -> form
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/auth/login")
-//                        .permitAll()
-//                ) //даем понять спрингу, что у нас больше не хранятся сессии пользователей
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -58,7 +46,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(personDetailsService)

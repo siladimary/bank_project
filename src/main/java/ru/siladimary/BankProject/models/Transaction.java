@@ -37,7 +37,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "account_number", referencedColumnName = "account_number")
     @NotNull(message = "Номер счета должен быть заполнен")
-    @JsonIgnore
     private Account accountNumber;
 
     public Transaction(TransactionAction transactionAction, BigDecimal amount, Account accountNumber) {

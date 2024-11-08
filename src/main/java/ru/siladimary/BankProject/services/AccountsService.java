@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.siladimary.BankProject.dto.TransferRequest;
+import ru.siladimary.BankProject.exceptions.AccountNotFoundException;
 import ru.siladimary.BankProject.models.Account;
 import ru.siladimary.BankProject.models.Person;
 import ru.siladimary.BankProject.models.Transaction;
@@ -29,7 +30,7 @@ public class AccountsService {
         this.peopleService = peopleService;
     }
 
-    public Integer generateUniqueAccountNumber(){
+    public Integer generateUniqueAccountNumber() {
         Integer accountNumber;
         do {
             accountNumber = generateNumber();
@@ -42,7 +43,7 @@ public class AccountsService {
     }
 
     @Transactional
-    public void create(Person person){
+    public void create(Person person) {
         Account account = new Account(generateUniqueAccountNumber(), person);
 
         person.getAccounts().add(account);
@@ -95,6 +96,13 @@ public class AccountsService {
         recipientAccount.get().setBalance(recipientAccount.get().getBalance().add(transferRequest.getAmount()));
         createTransaction(TransactionAction.TRANSFER_IN, recipientAccount.get(), transferRequest.getAmount());
         peopleService.updateTotalBalance(recipientAccount.get());
+    }
+
+    public Account checkAccount(Integer accountNumber) {
+        Optional<Account> account = findByAccountNumber(accountNumber);
+        if (account.isEmpty())
+            throw new AccountNotFoundException("Счета с таким номером не существует");
+        return account.get();
     }
 
 

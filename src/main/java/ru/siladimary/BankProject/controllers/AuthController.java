@@ -51,7 +51,6 @@ public class AuthController {
                     "Пароли не совпадают");
 
         usernameValidator.validate(convertToPerson(personDTO), bindingResult);
-
         if (bindingResult.hasErrors())
             throw new PersonNotCreatedException(ErrorConstructUtil.constructErrorMessageToClient(bindingResult));
 
@@ -69,8 +68,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> performLogin(@RequestBody @Valid AuthenticationDTO authenticationDTO,
                                                             BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(Map.of("error",
                     ErrorConstructUtil.constructErrorMessageToClient(bindingResult)));
         }

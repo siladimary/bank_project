@@ -27,11 +27,4 @@ public class AccountDTO {
 
     @JsonIgnore
     private List<TransactionDTO> transactions;
-
-    public AccountDTO(Integer accountNumber, PersonResponse username) {
-        this.accountNumber = accountNumber;
-        this.balance = BigDecimal.ZERO;
-        this.username = username;
-        this.transactions = new ArrayList<>();
-    }
 }
