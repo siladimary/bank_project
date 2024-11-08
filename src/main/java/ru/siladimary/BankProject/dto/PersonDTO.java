@@ -13,11 +13,11 @@ import java.util.List;
 @Setter
 public class PersonDTO {
     @NotNull(message = "Поле с именем не должно быть пустым")
-    @Pattern(regexp = "[А-Я][а-яё]+")
+    @Pattern(regexp = "[А-Я][а-яё]+", message = "Имя должно начинаться с заглавной буквы")
     private String firstName;
 
     @NotNull(message = "Поле с фамилией не должно быть пустым")
-    @Pattern(regexp = "[А-Я][а-яё]+")
+    @Pattern(regexp = "[А-Я][а-яё]+", message = "Фамилия должна начинаться с заглавной буквы")
     private String lastName;
 
     @NotNull(message = "Поле с возрастом не должно быть пустым")

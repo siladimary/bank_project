@@ -20,12 +20,12 @@ public class Person {
     private Long id;
 
     @NotNull(message = "Поле с именем не должно быть пустым")
-    @Pattern(regexp = "[А-Я][а-яё]+")
+    @Pattern(regexp = "[А-Я][а-яё]+", message = "Имя должно начинаться с заглавной буквы")
     @Column(name = "first_name")
     private String firstName;
 
     @NotNull(message = "Поле с фамилией не должно быть пустым")
-    @Pattern(regexp = "[А-Я][а-яё]+")
+    @Pattern(regexp = "[А-Я][а-яё]+", message = "Фамилия должна начинаться с заглавной буквы")
     @Column(name = "last_name")
     private String lastName;
 

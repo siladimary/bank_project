@@ -74,9 +74,9 @@ public class AccountController {
             PagedModel<EntityModel<TransactionDTO>> pagedModel = assembler.toModel(transactionsPage.
                     map(transaction -> mapper.map(transaction, TransactionDTO.class)));
             return ResponseEntity.ok(pagedModel);
-        } catch (AccountNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); //TODO проверить другие методы, где есть это исключение, чтобы сообщение выводилось пользователю
-        } catch (Exception e){
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(500).body("Произошла ошибка при загрузке транзакций");
         }
     }
@@ -89,6 +89,8 @@ public class AccountController {
             Account account = accountsService.checkAccount(accountNumber);
             accountsService.deposit(account, amount);
             return ResponseEntity.ok("Счет успешно пополнен");
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -103,6 +105,8 @@ public class AccountController {
             Account account = accountsService.checkAccount(accountNumber);
             accountsService.withdraw(account, amount);
             return ResponseEntity.ok("Деньги успешно сняты");
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -121,6 +125,8 @@ public class AccountController {
             Account account = accountsService.checkAccount(accountNumber);
             accountsService.transfer(account, transferRequest);
             return ResponseEntity.ok("Деньги успешно переведены");
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
